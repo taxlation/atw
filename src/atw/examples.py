@@ -1,4 +1,4 @@
-from art import Art1, Art2, Art4
+from atw.art import Art1, Art2, Art4
 from datetime import date, timedelta
 
 # Voorbeeld los gebruik van Art1: 2025-12-24 startdatum en 72 uur
