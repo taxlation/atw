@@ -146,16 +146,13 @@ class Art4:
     """
     return self.startDatum + self.wettelijkeTermijn + self.verlengingTermijn
   
-  def Art4OnderdeelA(self):
+def Art4OnderdeelA(self) -> bool:
     """
     Laat verlengde termijnen niet van toepassing zijn indien de wettelijke termijn specifiek is geformuleerd.
-
-    Functie checkt of de wettelijke termijn een specifieke eenheid heeft en eventueel een minimale grootte.
-
-    Geeft terug:
-      timedelta: De verlenging van de termijn.
+    
+    Returns:
+      bool: True if Art. 4 applies (no extensions allowed)
     """
-     
     if ((self.wettelijkeTermijnEenheid == 'uur') or
       (self.wettelijkeTermijn > timedelta(days=90) and self.wettelijkeTermijnEenheid == 'dag') or
       (self.wettelijkeTermijn > timedelta(weeks=12) and self.wettelijkeTermijnEenheid == 'week') or
@@ -163,3 +160,7 @@ class Art4:
       (self.wettelijkeTermijn >= (self.startDatum + relativedelta(year=12) - self.startDatum) and self.wettelijkeTermijnEenheid == 'jaar')
     ):
       self.verlengingTermijn = timedelta(days=0)
+      return True
+    return False
+
+      
