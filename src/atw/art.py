@@ -133,6 +133,7 @@ class Art4:
 
   def __post_init__(self):
     self.Art4OnderdeelA()
+    self._applies = self.Art4OnderdeelA()
 
   @property
   def einddatum(self):
@@ -145,22 +146,25 @@ class Art4:
       datetime.date: De einddatum met inachtneming van de wettelijke termijn en verlenging.
     """
     return self.startDatum + self.wettelijkeTermijn + self.verlengingTermijn
-  
-def Art4OnderdeelA(self) -> bool:
-    """
-    Laat verlengde termijnen niet van toepassing zijn indien de wettelijke termijn specifiek is geformuleerd.
-    
-    Returns:
-      bool: True if Art. 4 applies (no extensions allowed)
-    """
-    if ((self.wettelijkeTermijnEenheid == 'uur') or
-      (self.wettelijkeTermijn > timedelta(days=90) and self.wettelijkeTermijnEenheid == 'dag') or
-      (self.wettelijkeTermijn > timedelta(weeks=12) and self.wettelijkeTermijnEenheid == 'week') or
-      (self.wettelijkeTermijn > (self.startDatum + relativedelta(months=1) - self.startDatum) and self.wettelijkeTermijnEenheid == 'maand') or
-      (self.wettelijkeTermijn >= (self.startDatum + relativedelta(year=12) - self.startDatum) and self.wettelijkeTermijnEenheid == 'jaar')
-    ):
-      self.verlengingTermijn = timedelta(days=0)
-      return True
-    return False
 
+  @property
+  def applies(self) -> bool:
+      return self._applies
+  
+  def Art4OnderdeelA(self) -> bool:
+      """
+      Laat verlengde termijnen niet van toepassing zijn indien de wettelijke termijn specifiek is geformuleerd.
       
+      Returns:
+        bool: True if Art. 4 applies (no extensions allowed)
+      """
+      if ((self.wettelijkeTermijnEenheid == 'uur') or
+        (self.wettelijkeTermijn > timedelta(days=90) and self.wettelijkeTermijnEenheid == 'dag') or
+        (self.wettelijkeTermijn > timedelta(weeks=12) and self.wettelijkeTermijnEenheid == 'week') or
+        (self.wettelijkeTermijn > (self.startDatum + relativedelta(months=1) - self.startDatum) and self.wettelijkeTermijnEenheid == 'maand') or
+        (self.wettelijkeTermijn >= (self.startDatum + relativedelta(year=12) - self.startDatum) and self.wettelijkeTermijnEenheid == 'jaar')
+      ):
+        self.verlengingTermijn = timedelta(days=0)
+        return True
+      return False
+
